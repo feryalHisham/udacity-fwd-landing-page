@@ -10,6 +10,10 @@
 
 
 /* ---- Base Rules ---- */
+html {
+scroll-behavior: smooth;
+}
+
 body {
     background: rgb(136,203,171);
     background: linear-gradient(0deg, rgba(136,203,171,1) 0%, rgba(0,13,60,1) 100%);
@@ -64,13 +68,20 @@ section {
 /* ---- Module Rules ---- */
 
 /* Navigation Styles*/
+nav {
+    background: linear-gradient(
+        180deg
+        , rgba(136,203,171,1) 0%, rgba(0,13,60,1) 100%);
+}
+
 .navbar__menu ul {
     padding-left: 0;
     margin: 0;
-    text-align: right;
+    display: flex;
+
 }
 
-.navbar__menu li {
+.navbar__menu a {
     display: inline-block;
 }
 
@@ -79,11 +90,11 @@ section {
     padding: 1em;
     font-weight: bold;
     text-decoration: none;
-    color: #000;
+    color: #fff;
 }
 
 .navbar__menu .menu__link:hover {
-    background: #333;
+    background: rgba(204, 204, 17, 0.5);
     color: #fff;
     transition: ease 0.3s all;
 }
