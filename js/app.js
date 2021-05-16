@@ -13,7 +13,8 @@ function main () {
     const sections = document.querySelectorAll('section');
     const navigationMenu =  document.getElementById('navbar__list');
     appendNavigationItemsToMenu(sections,navigationMenu);
-    listenToNavigationMenuClick(navigationMenu)
+    listenToNavigationMenuClick(navigationMenu);
+    listenToScrollEvent();
 }
 
 /**
@@ -73,6 +74,48 @@ function addActiveStyleClassToNavigationLink(navigationLink) {
     navigationLink.classList.add('link__active');
 }
 
+/**
+ * Adds event listeners for `wheel` event and `keydown` event for 'ArrowDown' and 'ArrowUp' keys since theses events represent scrolling other than the `scroll` event that also is fired due to anchors. 
+ */
+function listenToScrollEvent() {
+    document.addEventListener('wheel', handleScrollEvent);
+    document.addEventListener('keydown', checkForArrowKeys);
+
+}
+
+/**
+ * Activates the currently active section and navigation link on user scrolling through the page.
+ */
+function handleScrollEvent() {
+    const activeSection = getSectionNearViewPort();
+    if(activeSection) {
+        addActiveStyleClassToSection(activeSection);
+        const activeLink = getNavLinkOfActiveSection(activeSection.id);
+        addActiveStyleClassToNavigationLink(activeLink);
+    }
+}
+
+/**
+ * Call handleScrollEvent() of the key pressed is `ArrowDown` or `ArrowUp`. 
+ * @param {*} keydownEvent the `keydown` event captured
+ */
+function checkForArrowKeys(keydownEvent) {
+    if(keydownEvent.key === 'ArrowDown' || keydownEvent.key === 'ArrowUp') {
+        handleScrollEvent();
+    }
+}
+
+/**
+ * Returns the navigation link anchor element corresponding to the currently viewed section.
+ * @param {*} sectionId the section id of the currently viewed section
+ * @returns the active anchor element
+ */
+function getNavLinkOfActiveSection(sectionId) {
+    const navigationLinks = document.querySelectorAll('a');
+    return (Array.from(navigationLinks)).find(navLink => navLink.getAttribute('href').includes(sectionId));
+}
+
+
 ////////////////////////// Utility Functions ///////////////////////////////////////
 
 /**
@@ -84,4 +127,21 @@ function addActiveStyleClassToNavigationLink(navigationLink) {
     elementsWithClass.forEach(element => {
         element.classList.remove(className);
     })
+}
+
+/**
+ * Loops through the sectionsList and gets the offset between each section and the top of the viewport 
+ * @returns the section near the top of the viewport
+ */
+ function getSectionNearViewPort() {
+    let activeSection;
+    const sections = document.querySelectorAll('section'); 
+    for (const section of sections) {
+        const offsetYFromViewPort = section.getBoundingClientRect().y;
+        if ( offsetYFromViewPort > 0 && offsetYFromViewPort < 500 || offsetYFromViewPort < 0 && offsetYFromViewPort > -150) {
+            activeSection = section;
+            break;
+        }
+    }
+    return activeSection;
 }
