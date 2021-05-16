@@ -1,13 +1,12 @@
 # Landing Page Project
 
 ## Table of Contents
+* [Project Overview](#project-overView)
+* [Implementation Overview](#implementation-overview)
 
-* [Instructions](#instructions)
 
-## Instructions
+## Project Overview
+This project build a navigaton bar dynamically according to the number of sections in the page. To view the project page open `index.html`. The logic can be found in `js/app.js` and styles are in `css/style.css`.
 
-The starter project has some HTML and CSS styling to display a static version of the Landing Page project. You'll need to convert this project from a static project to an interactive one. This will require modifying the HTML and CSS files, but primarily the JavaScript file.
-
-To get started, open `js/app.js` and start building out the app's functionality
-
-For specific, detailed instructions, look at the project instructions in the Udacity Classroom.
+## Implementation Overview
+The logic is written using javascript. The `js/app.js` file consists of several functions breaking down the logic. The main function that initiates the call of other function is the listener function of `DOMContentLoaded` event.
