@@ -1,4 +1,5 @@
-
+let scrollEventOccurred = false;
+let pageJustLoaded = true;
 /**
  * Any logic runs after the DOM content is loaded.
  * 
@@ -50,6 +51,7 @@ function onClickNavMenu(clickEvent) {
     const clickedElement = clickEvent.target;
     const navigatedToSection = clickedElement.getAttribute('href');
     if (navigatedToSection) {
+        pageJustLoaded = false;
         addActiveStyleClassToNavigationLink(clickedElement);
         addActiveStyleClassToSection(document.getElementById(navigatedToSection.substring(1)));
     }
@@ -85,6 +87,8 @@ function listenToScrollEvent() {
 
 /**
  * Activates the currently active section and navigation link on user scrolling through the page.
+ * 
+ * Handles display or hide navigation menu.
  */
 function handleScrollEvent() {
     const activeSection = getSectionNearViewPort();
@@ -93,6 +97,15 @@ function handleScrollEvent() {
         const activeLink = getNavLinkOfActiveSection(activeSection.id);
         addActiveStyleClassToNavigationLink(activeLink);
     }
+    pageJustLoaded = false;
+    if(scrollEventOccurred){
+        return;
+    }
+    scrollEventOccurred = true;
+    displayNavigationMenu(true);
+    setTimeout(() => scrollEventOccurred = false, 500);
+    setTimeout(hideNavigationMenuIfPossible, 3000);
+
 }
 
 /**
@@ -113,6 +126,22 @@ function checkForArrowKeys(keydownEvent) {
 function getNavLinkOfActiveSection(sectionId) {
     const navigationLinks = document.querySelectorAll('a');
     return (Array.from(navigationLinks)).find(navLink => navLink.getAttribute('href').includes(sectionId));
+}
+
+/**
+ * Sets the display value for the navigation menu
+ * @param {*} display is true when the nav menu needs to appear and false otherwise.
+ */
+ function displayNavigationMenu(display) {
+    const navigationMenu =  document.getElementById('navbar__list');
+    navigationMenu.style = display ? 'display:flex': 'display: none;';
+}
+
+function hideNavigationMenuIfPossible() {
+    const navigationMenu =  document.getElementById('navbar__list');
+    if(!scrollEventOccurred && !pageJustLoaded  && window.pageYOffset > navigationMenu.clientHeight) {
+        displayNavigationMenu(false);
+    }
 }
 
 
