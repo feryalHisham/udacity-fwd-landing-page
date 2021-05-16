@@ -78,11 +78,17 @@ nav {
     padding-left: 0;
     margin: 0;
     display: flex;
-
+    overflow: auto;
+    white-space: nowrap;
+    scrollbar-width: none;
 }
 
-.navbar__menu a {
-    display: inline-block;
+.navbar__menu ul::-webkit-scrollbar {
+    display: none;
+}
+
+.navbar__menu a li{
+    display: block;
 }
 
 .navbar__menu .menu__link {

@@ -29,6 +29,8 @@ function appendNavigationItemsToMenu(sections, navigationMenu) {
         navigationLink.href = '#' + section.id;
         navigationLink.innerText = section.getAttribute('data-nav');
         navigationLink.classList.add('menu__link');
+        const navigationItem = document.createElement('li');
+        navigationLink.appendChild(navigationItem);
         navigationMenu.appendChild(navigationLink);
     }
 }
@@ -96,6 +98,7 @@ function handleScrollEvent() {
         addActiveStyleClassToSection(activeSection);
         const activeLink = getNavLinkOfActiveSection(activeSection.id);
         addActiveStyleClassToNavigationLink(activeLink);
+        activeLink.firstElementChild.scrollIntoView();
     }
     pageJustLoaded = false;
     if(scrollEventOccurred){
