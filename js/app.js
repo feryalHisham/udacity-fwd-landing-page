@@ -14,6 +14,8 @@ function main () {
     const sections = document.querySelectorAll('section');
     const navigationMenu =  document.getElementById('navbar__list');
     appendNavigationItemsToMenu(sections,navigationMenu);
+    handlePageLoadedWithHash();
+    window.addEventListener('popstate', handlePageLoadedWithHash);
     listenToNavigationMenuClick(navigationMenu);
     listenToScrollEvent();
 }
@@ -32,6 +34,19 @@ function appendNavigationItemsToMenu(sections, navigationMenu) {
         const navigationItem = document.createElement('li');
         navigationLink.appendChild(navigationItem);
         navigationMenu.appendChild(navigationLink);
+    }
+}
+
+/**
+ * Called at the first page load and whenever the url changes to handle activating sections and events when the user manulally enters the hash of the section on the url for example:
+ * [PATH_TO_PROJECT]/index.html#section10
+ */
+function handlePageLoadedWithHash() {
+    if(window.location.hash) {
+        const activeSection = document.getElementById(window.location.hash.substring(1));
+        activeSection.scrollIntoView();
+        activateSectionsAndNavLinks(activeSection);
+
     }
 }
 
@@ -95,10 +110,7 @@ function listenToScrollEvent() {
 function handleScrollEvent() {
     const activeSection = getSectionNearViewPort();
     if(activeSection) {
-        addActiveStyleClassToSection(activeSection);
-        const activeLink = getNavLinkOfActiveSection(activeSection.id);
-        addActiveStyleClassToNavigationLink(activeLink);
-        activeLink.firstElementChild.scrollIntoView();
+       activateSectionsAndNavLinks(activeSection);
     }
     pageJustLoaded = false;
     if(scrollEventOccurred){
@@ -109,6 +121,17 @@ function handleScrollEvent() {
     setTimeout(() => scrollEventOccurred = false, 500);
     setTimeout(hideNavigationMenuIfPossible, 3000);
 
+}
+
+/**
+ * Calls functions that sets the css styles for active sections and navigation links.
+ * @param {*} activeSection 
+ */
+function activateSectionsAndNavLinks(activeSection) {
+    addActiveStyleClassToSection(activeSection);
+    const activeLink = getNavLinkOfActiveSection(activeSection.id);
+    addActiveStyleClassToNavigationLink(activeLink);
+    activeLink.firstElementChild.scrollIntoView();
 }
 
 /**
